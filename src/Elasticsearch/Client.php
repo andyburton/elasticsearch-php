@@ -264,6 +264,41 @@ class Client
 
 
     /**
+     * $params['index']        = (string) The name of the index (Required)
+     *        ['type']         = (string) The type of the document (Required)
+     *        ['consistency']  = (enum) Specific write consistency setting for the operation
+     *        ['parent']       = (string) ID of parent document
+     *        ['refresh']      = (boolean) Refresh the index after performing the operation
+     *        ['replication']  = (enum) Specific replication type
+     *        ['routing']      = (string) Specific routing value
+     *        ['timeout']      = (time) Explicit operation timeout
+     *        ['version_type'] = (enum) Specific version type
+     *
+     * @param $params array Associative array of parameters
+     *
+     * @return array
+     */
+    public function deleteType($params)
+    {
+
+        $index = $this->extractArgument($params, 'index');
+
+        $type = $this->extractArgument($params, 'type');
+
+        /** @var callback $endpointBuilder */
+        $endpointBuilder = $this->dicEndpoints;
+
+        /** @var \Elasticsearch\Endpoints\DeleteType $endpoint */
+        $endpoint = $endpointBuilder('DeleteType');
+        $endpoint->setIndex($index)
+                 ->setType($type);
+        $endpoint->setParams($params);
+        $response = $endpoint->performRequest();
+        return $response['data'];
+    }
+	
+
+    /**
      *
      * $params[''] @todo finish the rest of these params
      *        ['ignore_unavailable'] = (bool) Whether specified concrete indices should be ignored when unavailable (missing or closed)
